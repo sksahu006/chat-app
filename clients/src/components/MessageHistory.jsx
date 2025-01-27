@@ -1,10 +1,8 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import ScrollableFeed from "react-scrollable-feed"
-import { isSameSender, isSameSenderMargin, isSameUser, isLastMessage } from '../utils/logics'
-import { Tooltip } from "@chakra-ui/tooltip";
-import { Avatar } from "@chakra-ui/avatar";
-import "../pages/home.css"
+import React from 'react';
+import { useSelector } from 'react-redux';
+import ScrollableFeed from "react-scrollable-feed";
+import { isSameSender, isSameSenderMargin, isSameUser, isLastMessage } from '../utils/logics';
+import "../pages/home.css";
 
 // Helper function to check if the message is from today
 const isToday = (date) => {
@@ -27,74 +25,67 @@ function MessageHistory({ messages }) {
   let lastDate = null;
 
   return (
-    <>
-      <ScrollableFeed className='scrollbar-hide'>
-        {messages &&
-          messages.map((m, i) => {
-            const messageDate = new Date(m.createdAt);
-            const isSameDay = lastDate && messageDate.toDateString() === lastDate.toDateString();
-            lastDate = messageDate;
+    <ScrollableFeed className='scrollbar-hide'>
+      {messages &&
+        messages.map((m, i) => {
+          const messageDate = new Date(m.createdAt);
+          const isSameDay = lastDate && messageDate.toDateString() === lastDate.toDateString();
+          lastDate = messageDate;
 
-            return (
-              <React.Fragment key={m._id}>
-                {/* Date Separator */}
-                {!isSameDay && (
-                  <div className="text-center text-sm text-gray-500 my-3">
-                    {isToday(messageDate) ? "Today" : formatDate(messageDate)}
-                  </div>
-                )}
+          return (
+            <React.Fragment key={m._id}>
+              {/* Date Separator */}
+              {!isSameDay && (
+                <div className="text-center text-sm text-gray-500 my-3">
+                  {isToday(messageDate) ? "Today" : formatDate(messageDate)}
+                </div>
+              )}
 
-                <div className='flex items-center gap-x-[6px]'>
-                  {(isSameSender(messages, m, i, activeUser.id) ||
-                    isLastMessage(messages, i, activeUser.id)) && (
-                      <Tooltip label={m.sender?.name} placement="bottom-start" hasArrow>
-                        <Avatar
-                          style={{ width: "32px", height: "32px" }}
-                          mt="43px"
-                          mr={1}
-                          cursor="pointer"
-                          name={m.sender?.name}
-                          src={m.sender?.profilePic}
-                          borderRadius="25px"
-                        />
-                      </Tooltip>
-                    )}
+              <div className="flex items-center gap-x-2">
+                {/* Avatar & Tooltip */}
+                {(isSameSender(messages, m, i, activeUser.id) ||
+                  isLastMessage(messages, i, activeUser.id)) && (
+                    <div className="relative group">
+                      {/* Avatar Image */}
+                      <img
+                        className="w-8 h-8 rounded-full object-cover"
+                        src={m.sender?.profilePic || "/default-avatar.png"}
+                        alt={m.sender?.name}
+                      />
+                      {/* Tooltip */}
+                      <div className="absolute left-10 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity">
+                        {m.sender?.name}
+                      </div>
+                    </div>
+                  )}
+
+                {/* Message Bubble */}
+                <span
+                  className="tracking-wider text-[15px] font-medium relative px-4 py-2 max-w-[460px] rounded-lg"
+                  style={{
+                    backgroundColor: m.sender._id === activeUser.id ? "#268d61" : "#f0f0f0",
+                    marginLeft: isSameSenderMargin(messages, m, i, activeUser.id),
+                    marginTop: isSameUser(messages, m, i, activeUser.id) ? 3 : 10,
+                    borderRadius: m.sender._id === activeUser.id ? "10px 10px 0px 10px" : "10px 10px 10px 0",
+                    color: m.sender._id === activeUser.id ? "#fff" : "#848587",
+                  }}
+                >
+                  {m.message}
                   <span
-                    className="tracking-wider text-[15px] font-medium"
+                    className="block text-xs text-right mt-1"
                     style={{
-                      backgroundColor: `${m.sender._id === activeUser.id ? "#268d61" : "#f0f0f0"}`,
-                      marginLeft: isSameSenderMargin(messages, m, i, activeUser.id),
-                      marginTop: isSameUser(messages, m, i, activeUser.id) ? 3 : 10,
-                      borderRadius: `${m.sender._id === activeUser.id ? "10px 10px 0px 10px" : "10px 10px 10px 0"}`,
-                      padding: "10px 18px",
-                      maxWidth: "460px",
-                      color: `${m.sender._id === activeUser.id ? "#fff" : "#848587"}`,
-                      position: "relative",
+                      color: m.sender._id === activeUser.id ? "#e6e6e6" : "#848587",
                     }}
                   >
-                    {m.message}
-                    <span
-                      style={{
-                        display: "block",
-                        fontSize: "10px",
-                        color: `${m.sender._id === activeUser.id ? "#e6e6e6" : "#848587"}`,
-                        textAlign: "right",
-                        marginTop: "5px",
-                      }}
-                    >
-                      {/* {isToday(messageDate)
-                        ? messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                        : formatDate(messageDate)} */}
-                        {messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
+                    {messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
-                </div>
-              </React.Fragment>
-            );
-          })
-        }
-      </ScrollableFeed >
-    </>
+                </span>
+              </div>
+            </React.Fragment>
+          );
+        })
+      }
+    </ScrollableFeed>
   );
 }
 

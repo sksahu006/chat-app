@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { GoogleLogin } from "react-google-login"
+// import { GoogleLogin } from "react-google-login"
 import { gapi } from "gapi-script"
 import { useEffect } from 'react'
 import { googleAuth, registerUser } from '../apis/auth'

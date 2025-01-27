@@ -1,6 +1,5 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { GoogleLogin } from "react-google-login"
 import { gapi } from "gapi-script"
 import { googleAuth } from '../apis/auth'
 import { useState } from 'react'
