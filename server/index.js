@@ -30,7 +30,12 @@ const server = app.listen(PORT, () => {
 const io = new Server.Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: 'http://localhost:3000',
+    origin: [
+      'http://localhost:3000',
+      'https://chat-app-eta-rose.vercel.app',
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true, 
   },
 });
 io.on('connection', (socket) => {
