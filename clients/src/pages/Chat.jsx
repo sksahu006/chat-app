@@ -42,7 +42,7 @@ function Chat(props) {
   }
 
 const handleClickOutside = (event) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
+    if (emojiRef.current && !emojiRef.current.contains(event.target)) {
       setShowPicker(false);
     }
   };
