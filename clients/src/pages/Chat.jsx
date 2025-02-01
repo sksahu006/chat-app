@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Model from '../components/Model';
 import { BsEmojiSmile, BsFillEmojiSmileFill } from "react-icons/bs"
@@ -28,6 +28,7 @@ function Chat(props) {
   const [loading, setLoading] = useState(false)
   const [showPicker, setShowPicker] = useState(false);
   const activeUser = useSelector((state) => state.activeUser)
+  const emojiref = useRef(null);
 
   const keyDownFunction = async (e) => {
     if ((e.key === "Enter" || e.type === "click") && (message)) {
@@ -40,7 +41,11 @@ function Chat(props) {
     }
   }
 
-
+const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setShowPicker(false);
+    }
+  };
   useEffect(() => {
     socket = io(ENDPOINT)
     socket.on("typing", () => setIsTyping(true))
@@ -125,7 +130,7 @@ function Chat(props) {
             </div>
             <div className='absolute left-[31%] bottom-[8%]'>
               {
-                showPicker && <Picker data={data} onEmojiSelect={(e) => setMessage(message + e.native)} />
+                showPicker && <Picker ref={emojiref} data={data} onEmojiSelect={(e) => setMessage(message + e.native)} />
               }
               <div className='border-[1px] border-[#aabac8] px-6 py-3 w-[360px] sm:w-[400px] md:w-[350px] h-[50px] lg:w-[400px] rounded-t-[10px]'>
 
