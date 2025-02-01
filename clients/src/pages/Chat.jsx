@@ -28,7 +28,7 @@ function Chat(props) {
   const [loading, setLoading] = useState(false)
   const [showPicker, setShowPicker] = useState(false);
   const activeUser = useSelector((state) => state.activeUser)
-  const emojiref = useRef(null);
+  const emojiRef = useRef(null);
 
   const keyDownFunction = async (e) => {
     if ((e.key === "Enter" || e.type === "click") && (message)) {
@@ -130,7 +130,7 @@ const handleClickOutside = (event) => {
             </div>
             <div className='absolute left-[31%] bottom-[8%]'>
               {
-                showPicker && <Picker ref={emojiref} data={data} onEmojiSelect={(e) => setMessage(message + e.native)} />
+                showPicker && <Picker ref={emojiRef} data={data} onEmojiSelect={(e) => setMessage(message + e.native)} />
               }
               <div className='border-[1px] border-[#aabac8] px-6 py-3 w-[360px] sm:w-[400px] md:w-[350px] h-[50px] lg:w-[400px] rounded-t-[10px]'>
 
